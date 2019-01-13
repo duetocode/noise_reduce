@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.contrib.layers import conv2d, conv2d_transpose
-from normalization import pixel_norm
+from .norms import pixel_norm
 
 def build_generator(input_tensor, layer_num=6):
     with tf.variable_scope('generator'):
