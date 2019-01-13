@@ -4,7 +4,7 @@ from tensorflow.nn import leaky_relu
 from normalization import pixel_norm
 
 
-def build_discriminator(images, layer_num=5):
+def build_discriminator(images, layer_num=6):
     with tf.variable_scope('discriminator'):
         net = tf.identity(images, name='input')
 
