@@ -1,6 +1,6 @@
 import unittest
 import tensorflow as tf
-from generator import build_generator
+from .generator import build_generator
 
 class TestGenerator(unittest.TestCase):
 

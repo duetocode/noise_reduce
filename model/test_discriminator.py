@@ -1,6 +1,6 @@
 import tensorflow as tf
 import unittest
-from discriminator import build_discriminator
+from .discriminator import build_discriminator
 
 class TestDiscriminator(unittest.TestCase):
 

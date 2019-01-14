@@ -1,7 +1,7 @@
 import tensorflow as tf
 import unittest
-from generator import build_generator
-from discriminator import build_discriminator
+from .generator import build_generator
+from .discriminator import build_discriminator
 
 class TestIntegration(unittest.TestCase):
 

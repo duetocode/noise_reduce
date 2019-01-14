@@ -115,3 +115,6 @@ dmypy.json
 .pyre/
 
 dataset/
+samples/
+checkpoints/
+.DS_Store
