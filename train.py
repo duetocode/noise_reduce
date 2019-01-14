@@ -4,7 +4,7 @@ import numpy as np
 
 from PIL import Image
 from model import build_discriminator, build_generator
-from loss import least_loss as loss
+from loss import wasserstein_gp as loss
 from dataset import open_new_dataset, wreck
 
 HOME='.'
@@ -13,7 +13,7 @@ HOME='.'
 learning_rate = 1e-4
 beta1 = 0.5
 epochs = 2
-batch_size = 8
+batch_size = 2
 
 iterations_per_epoch = 2500
 
@@ -36,8 +36,8 @@ with tf.variable_scope('') as scope:
     fake_logits = build_discriminator(fake_images)
     scope.reuse_variables()
     real_logits = build_discriminator(real_images)
+    G_loss, D_loss = loss(fake_logits, real_logits, fake_images, real_images, batch_size, build_discriminator)
 
-G_loss, D_loss = loss(fake_logits, real_logits)
 G_loss = (1 - l1_ratio) * G_loss + l1_ratio * tf.losses.mean_squared_error(fake_images, real_images)
 
 D_solver = tf.train.AdamOptimizer(learning_rate=learning_rate, beta1=beta1)
@@ -72,9 +72,7 @@ def onEpoch(e, sess):
     for i in range(iterations_per_epoch):
         _real_images = sess.run(images)
         _wrecked_images = wreck(_real_images)
-        _, _G_loss, _fake_images = sess.run([G_train_step, G_loss, fake_images], \
-            feed_dict={wrecked_images: _wrecked_images, real_images: _real_images})
-        _, _D_loss = sess.run([D_train_step, D_loss], \
+        _, _, _G_loss, _D_loss, _fake_images = sess.run([G_train_step, D_train_step, G_loss, D_loss, fake_images], \
             feed_dict={wrecked_images: _wrecked_images, real_images: _real_images})
 
         print(f'\recho[{e} - ]{i}/{iterations_per_epoch}, D_LOSS:{_D_loss}, G_LOSS:{_G_loss}', end='')
